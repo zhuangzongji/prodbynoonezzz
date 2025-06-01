@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// 取得 localStorage 裡已儲存的購物車資料
+const savedCartItems = localStorage.getItem('cartItems');
+
 // Part1: Define Slice (including reducers and actions)
-const initialState = { cartItems: [] };
+const initialState = {
+  cartItems: savedCartItems ? JSON.parse(savedCartItems) : [],
+};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -17,10 +23,17 @@ const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, item];
       }
+      // 同步更新 localStorage
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
-    // Part2: Add removeCartItems action to remove an item from the cart
     removeCartItems: (state, action) => {
       state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
+      // 同步更新 localStorage
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    },
+    clearCart: (state) => {
+      state.cartItems = [];
+      localStorage.removeItem('cartItems');
     },
   },
 });
@@ -29,7 +42,7 @@ const cartSlice = createSlice({
 export const selectCartItems = (state) => state.cart.cartItems;
 
 // export actions to global
-export const { addCartItems, removeCartItems } = cartSlice.actions;
+export const { addCartItems, removeCartItems, clearCart } = cartSlice.actions;
 
 // export reducer to global
 export default cartSlice.reducer;
