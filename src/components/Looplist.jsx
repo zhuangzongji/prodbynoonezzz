@@ -74,7 +74,7 @@ function LoopsList() {
         />
       </div>
 
-      <div className="w-full max-w-6xl flex flex-col gap-4">
+      <div className="w-full max-w-4xl flex flex-col gap-4">
         {visibleProducts.length > 0 ? (
           visibleProducts.map((product) => (
             <ProductItem

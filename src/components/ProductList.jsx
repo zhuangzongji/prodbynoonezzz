@@ -13,7 +13,6 @@ function ProductList() {
   const [isLoading, setIsLoading] = useState(false);
   const loader = useRef(null);
 
-  // 根據分類取得資料
   const getProductsByCategory = () => {
     switch (category) {
       case 'drumkits':
@@ -28,6 +27,10 @@ function ProductList() {
 
   const products = getProductsByCategory();
 
+  const allTags = Array.from(
+    new Set(products.flatMap((product) => product.tags || []))
+  ).sort();
+
   const handleTagClick = (tag) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
@@ -39,7 +42,7 @@ function ProductList() {
       ? product.title?.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
 
-      const matchesTags =
+    const matchesTags =
       selectedTags.length === 0
         ? true
         : selectedTags.every((tag) => product.tags?.includes(tag));
@@ -82,28 +85,28 @@ function ProductList() {
     <div className="flex flex-col items-center gap-6 content w-full px-4">
       {/* 🔍 分類欄位 */}
       <div className="w-full max-w-6xl">
-  <div className="grid grid-cols-3 gap-4 mt-4">
-    {['beats', 'drumkits', 'loops'].map((cat) => (
-      <button
-        key={cat}
-        onClick={() => {
-          setCategory(cat);
-          setSearchTerm('');
-          setSelectedTags([]);
-        }}
-        className={`w-full py-3 font-bold transition-all 
-          ${
-            category === cat
-              ? ' border-b-4 border-orange-400 text-white'
-              : 'hover:bg-gray-700 border-b-4 border-transparent text-white'
-          }`}
-        style={{ fontFamily: 'Orbitron, sans-serif' }}
-      >
-        {cat.toUpperCase()}
-      </button>
-    ))}
-  </div>
-</div>
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {['beats', 'drumkits', 'loops'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setCategory(cat);
+                setSearchTerm('');
+                setSelectedTags([]);
+              }}
+              className={`w-full py-3 font-bold transition-all 
+                ${
+                  category === cat
+                    ? ' border-b-4 border-orange-400 text-white'
+                    : 'hover:bg-gray-700 border-b-4 border-transparent text-white'
+                }`}
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              {cat.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* 🔍 搜尋欄位 */}
       <div className="w-full max-w-xl">
@@ -116,6 +119,29 @@ function ProductList() {
           style={{ fontFamily: 'Orbitron, sans-serif' }}
         />
       </div>
+
+      {/* 🔍 Tag 篩選區塊 */}
+      {allTags.length > 0 && (
+        <div className="w-full max-w-xl flex flex-wrap gap-2 justify-center mt-2">
+          {allTags.map((tag, index) => {
+            const isActive = selectedTags.includes(tag);
+            return (
+              <button
+                key={index}
+                onClick={() => handleTagClick(tag)}
+                className={`text-sm px-3 py-1 rounded-full border transition-all ${
+                  isActive
+                    ? 'bg-orange-400 text-black font-bold border-orange-500'
+                    : 'text-orange-300 border-orange-300 hover:bg-orange-500 hover:text-black'
+                }`}
+                style={{ fontFamily: 'Orbitron, sans-serif' }}
+              >
+                #{tag}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* 🎵 商品列表 */}
       <div className="w-full max-w-6xl flex flex-col gap-4">

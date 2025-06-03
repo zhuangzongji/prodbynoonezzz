@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { Play, Pause } from 'lucide-react';
 import _ from 'lodash';
 
-function ProductItem({ product, onTagClick, selectedTags = [] }) {
+function ProductItem({ product }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(new Audio(`/audio/${product.title}.mp3`));
 
@@ -42,8 +42,7 @@ function ProductItem({ product, onTagClick, selectedTags = [] }) {
   return (
     <section className="pt-4 px-3 lg:px-4">
       <div
-        className="max-w-4xl mx-auto overflow-hidden rounded-xl shadow-xl bg-gradient-to-r from-purple-800 via-purple-600 to-orange-500 p-2"
-        style={{ height: '140px' }}
+        className="max-w-4xl mx-auto overflow-hidden rounded-xl shadow-xl bg-gradient-to-r from-purple-800 via-purple-600 to-orange-500 p-2  h-auto"
       >
         <div className="flex items-center h-full space-x-4">
           {/* 圖片區塊 */}
@@ -63,9 +62,9 @@ function ProductItem({ product, onTagClick, selectedTags = [] }) {
 
           {/* 內容區塊 */}
           <div className="flex-1 h-full flex flex-col justify-between p-2 bg-black bg-opacity-60 backdrop-blur-lg rounded-xl">
-            <div>
+            <div className="flex flex-col gap-2">
               <h4
-                className="text-2xl font-semibold text-white mb-1"
+                className="text-2xl font-semibold text-white"
                 style={{ fontFamily: 'Orbitron, sans-serif' }}
               >
                 {product.title}
@@ -77,53 +76,45 @@ function ProductItem({ product, onTagClick, selectedTags = [] }) {
                 {_.truncate(product.summary, { length: 60, omission: ' ... ' })}
               </p>
 
-              {/* Tag 顯示與點擊 */}
-              {product.tags && (
-                <div className="mt-1 flex flex-wrap gap-2 justify-center">
-                  {product.tags.map((tag, index) => {
-                    const isActive = selectedTags.includes(tag);
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => onTagClick?.(tag)}
-                        className={`text-xs px-2 py-1 rounded-full transition-all ${
-                          isActive
-                            ? 'bg-orange-500 text-black'
-                            : 'text-orange-300 hover:text-orange-500'
-                        }`}
-                        style={{ fontFamily: 'Orbitron, sans-serif' }}
-                      >
-                        #{tag}
-                      </button>
-                    );
-                  })}
+              {/* Tags 區塊 */}
+              {product.tags?.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 max-h-14 overflow-hidden">
+                  {product.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-xs px-2 py-1 rounded-full border border-orange-300 text-orange-300"
+                      style={{ fontFamily: 'Orbitron, sans-serif' }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
 
             {/* 購買按鈕 */}
-<div className="flex justify-end mt-2">
-  <Link
-    to={`/products/id/${product.id}`}
-    className="text-orange-400 hover:text-orange-600 font-semibold text-m flex items-center text-base transition-colors duration-200"
-    style={{ fontFamily: 'Orbitron, sans-serif' }}
-  >
-    PURCHASE
-    <svg
-      width="20"
-      height="20"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="3"
-      className="ml-2"
-      viewBox="0 0 24 24"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  </Link>
-</div>
+            <div className="flex justify-end mt-2">
+              <Link
+                to={`/products/id/${product.id}`}
+                className="text-orange-400 hover:text-orange-600 font-semibold text-m flex items-center text-base transition-colors duration-200"
+                style={{ fontFamily: 'Orbitron, sans-serif' }}
+              >
+                PURCHASE
+                <svg
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                  className="ml-2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
