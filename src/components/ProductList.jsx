@@ -123,11 +123,11 @@ function ProductList() {
       {/* 🔍 Tag 篩選區塊 */}
       {allTags.length > 0 && (
         <div className="w-full max-w-xl flex flex-wrap gap-2 justify-center mt-2">
-          {allTags.map((tag, index) => {
+          {allTags.map((tag) => {
             const isActive = selectedTags.includes(tag);
             return (
               <button
-                key={index}
+                key={tag}
                 onClick={() => handleTagClick(tag)}
                 className={`text-sm px-3 py-1 rounded-full border transition-all ${
                   isActive
@@ -148,7 +148,7 @@ function ProductList() {
         {visibleProducts.length > 0 ? (
           visibleProducts.map((product) => (
             <ProductItem
-              key={product.ID}
+              key={product.id}
               product={product}
               onTagClick={handleTagClick}
               selectedTags={selectedTags}
