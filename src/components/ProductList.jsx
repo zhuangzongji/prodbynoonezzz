@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ProductItem from './ProductItem';
+import DrumkitItem from './DrumkitItem';
+import LoopItem from './LoopItem';
 
 import beats from '../json/beats.json';
 import drumkits from '../json/drumkits.json';
@@ -25,7 +27,20 @@ function ProductList() {
     }
   };
 
+  const getItemComponent = () => {
+    switch (category) {
+      case 'drumkits':
+        return DrumkitItem;
+      case 'loops':
+        return LoopItem;
+      case 'beats':
+      default:
+        return ProductItem;
+    }
+  };
+
   const products = getProductsByCategory();
+  const ItemComponent = getItemComponent();
 
   const allTags = Array.from(
     new Set(products.flatMap((product) => product.tags || []))
@@ -147,7 +162,7 @@ function ProductList() {
       <div className="w-full max-w-6xl flex flex-col gap-4">
         {visibleProducts.length > 0 ? (
           visibleProducts.map((product) => (
-            <ProductItem
+            <ItemComponent
               key={product.id}
               product={product}
               onTagClick={handleTagClick}
