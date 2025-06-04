@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";  // react-router-dom
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../firebase";  // 你的 firebase 設定
+import { signInWithPopup, signOut } from "firebase/auth";
+import { auth, provider } from "../firebase";
 import { setUser, logout } from "../redux/authSlice";
 import CartSummary from "./CartSummary";
 import AuthButtons from "./AuthButtons";
@@ -10,32 +10,31 @@ import AuthButtons from "./AuthButtons";
 function Header({ title, slogan }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const [isOnTouch, setIsOnTouch] = useState(false);
 
-  // 點擊 Sign In，呼叫 Firebase Google 登入
   const handleSignInClick = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      dispatch(setUser({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      }));
+      dispatch(
+        setUser({
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+        })
+      );
     } catch (error) {
-      console.error("登入失敗:", error);
-      alert("登入失敗，請稍後再試");
+      if (error.code === "auth/popup-closed-by-user") {
+        console.warn("使用者關閉登入視窗");
+      } else {
+        console.error("登入失敗:", error);
+        alert("登入失敗，請稍後再試");
+      }
     }
-  };
-
-  // Sign Up 我們暫時同 Sign In（你可以另外做跳轉或別的流程）
-  const handleSignUpClick = () => {
-    handleSignInClick();
   };
 
   const handleLogoutClick = async () => {
     try {
-      await auth.signOut();
+      await signOut(auth);
       dispatch(logout());
     } catch (error) {
       console.error("登出失敗:", error);
@@ -83,10 +82,7 @@ function Header({ title, slogan }) {
             </button>
           </div>
         ) : (
-          <AuthButtons
-            onSignInClick={handleSignInClick}
-            onSignUpClick={handleSignUpClick}
-          />
+          <AuthButtons onSignInClick={handleSignInClick} />
         )}
       </div>
 
