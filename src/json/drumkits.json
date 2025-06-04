@@ -1,16 +1,10 @@
 [
     {
-       "id": "1",
-       "title": "LANE",
-       "author": "Prod by No.onezzZ",
-       "summary": "BPM:138/KEY:F#min",
-       "tags": ["future", "travis scott", "metro boomin"],
+       "id": "kit1",
+       "title": "drum kit",
        "cover": "/images/LANE.jpg",
-       "audio": "/audio/LANE.mp3",
-       "prices": {
-        "mp3": 29.99,
-        "wav": 49.99
-         }
-   }
+       "audio": "/audio/Crash-Butter.wav",
+       "prices":40.00
+    }
 
  ]

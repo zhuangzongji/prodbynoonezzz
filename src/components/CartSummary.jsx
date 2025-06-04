@@ -17,7 +17,7 @@ function CartSummary() {
         onClick={toggleModal}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="absolute top-4 right-4 md:right-8 cursor-pointer z-50"
+        className="cursor-pointer"
       >
         <div className="relative flex flex-col items-center justify-center w-[80px] h-[80px]">
           {/* 未來感 Badge */}
@@ -32,7 +32,7 @@ function CartSummary() {
 
           {/* 購物籃圖示 */}
           <div
-            className={`p-2 bg-black bg-opacity-50 rounded-2xl shadow-lg  transition-transform duration-300 ${
+            className={`p-2 transition-transform duration-300 ${
               hovered ? "scale-175" : "scale-150"
             }`}
           >
@@ -44,7 +44,7 @@ function CartSummary() {
 
           {/* 滑出 CART 字樣 */}
           <div
-            className={`absolute top-[60px] text-m font-semibold text-white bg-black px-3 py-1 rounded-full transition-all duration-300 ${
+            className={`absolute top-[60px] text-m font-semibold text-white ransition-all duration-300 ${
               hovered
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-2 pointer-events-none"

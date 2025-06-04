@@ -22,7 +22,7 @@ export default function AuthButtons({ onSignInClick }) {
 
       {/* 滑出 LOGIN 字樣 */}
       <div
-        className={`absolute top-[72px] text-m font-semibold text-white bg-black px-3 py-1 rounded-full  transition-all duration-300 ${
+        className={`absolute top-[72px] text-m font-semibold text-white transition-all duration-300 ${
           hovered
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-2 pointer-events-none'
