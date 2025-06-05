@@ -1,26 +1,19 @@
-function DrumkitItem({ product, onTagClick, selectedTags }) {
+import { Typewriter } from 'react-simple-typewriter';
+
+export default function DrumkitItem() {
   return (
-    <div className="bg-gray-800 p-4 rounded-2xl shadow-md">
-      <h2 className="text-white text-xl font-bold">{product.title}</h2>
-      <p className="text-orange-300 mt-2">${product.price}</p>
-      <div className="flex flex-wrap gap-2 mt-2">
-        {product.tags?.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => onTagClick(tag)}
-            className={`text-xs px-2 py-1 rounded-full border ${
-              selectedTags.includes(tag)
-                ? 'bg-orange-400 text-black font-bold border-orange-500'
-                : 'text-orange-300 border-orange-300 hover:bg-orange-500 hover:text-black'
-            }`}
-            style={{ fontFamily: 'Orbitron, sans-serif' }}
-          >
-            #{tag}
-          </button>
-        ))}
-      </div>
+    <div className="flex justify-center items-center h-40">
+      <h2 className="text-white text-lg md:text-xl font-bold" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+        <Typewriter
+          words={['Coming soon...']}
+          loop={0} // 不重複
+          cursor
+          cursorStyle="_"
+          typeSpeed={80}
+          deleteSpeed={50}
+          delaySpeed={1000}
+        />
+      </h2>
     </div>
   );
 }
-
-export default DrumkitItem;

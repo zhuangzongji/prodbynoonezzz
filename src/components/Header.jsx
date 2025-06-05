@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInWithPopup, signOut } from "firebase/auth";
@@ -8,10 +8,32 @@ import CartSummary from "./CartSummary";
 import AuthButtons from "./AuthButtons";
 import MobileMenu from "./MobileMenu";
 
+// 打字機效果，只打出 "Are you sure ?"
+function useTypewriterEffect(text, speed = 120) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        setDisplayedText((prev) => prev + text.charAt(index));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text, speed]);
+
+  return displayedText;
+}
+
 function Header({ title, slogan }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const [hovered, setHovered] = useState(false); // 控制登出動畫
+  const [hovered, setHovered] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const typewriterText = useTypewriterEffect("Are you sure ?", 120);
 
   const handleSignInClick = async () => {
     try {
@@ -34,14 +56,23 @@ function Header({ title, slogan }) {
     }
   };
 
-  const handleLogoutClick = async () => {
+  const handleConfirmLogout = async () => {
     try {
       await signOut(auth);
       dispatch(logout());
+      setShowLogoutModal(false);
     } catch (error) {
       console.error("登出失敗:", error);
       alert("登出失敗，請稍後再試");
     }
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
+
+  const handleAvatarClick = () => {
+    setShowLogoutModal(true);
   };
 
   return (
@@ -50,7 +81,7 @@ function Header({ title, slogan }) {
       <div className="hidden md:flex fixed top-4 right-4 gap-4 z-50">
         {user ? (
           <div
-            onClick={handleLogoutClick}
+            onClick={handleAvatarClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             className="cursor-pointer"
@@ -118,6 +149,36 @@ function Header({ title, slogan }) {
       <div className="flex mt-6 justify-center">
         <hr className="my-[25px] mx-auto w-[100px] border-0 border-t-[6px] opacity-100 rounded-full bg-gradient-to-r from-orange-400 via-yellow-500 to-pink-600" />
       </div>
+
+      {/* 登出確認 Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-black border-2 border-orange-400 rounded-xl shadow-2xl p-6 w-[90%] max-w-md text-center">
+            <p
+              className="text-white text-lg mb-6"
+              style={{ fontFamily: "Orbitron, sans-serif" }}
+            >
+              {typewriterText}
+            </p>
+            <div className="flex justify-center gap-6">
+              <button
+                onClick={handleConfirmLogout}
+                className="text-white font-semibold transition-transform hover:scale-110 hover:text-orange-400"
+                style={{ fontFamily: "Orbitron, sans-serif" }}
+              >
+                YES
+              </button>
+              <button
+                onClick={handleCancelLogout}
+                className="text-white font-semibold transition-transform hover:scale-110 hover:text-orange-400"
+                style={{ fontFamily: "Orbitron, sans-serif" }}
+              >
+                NO
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

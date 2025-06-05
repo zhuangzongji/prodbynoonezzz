@@ -137,7 +137,7 @@ function ProductList() {
 
       {/* 🔍 Tag 篩選區塊 */}
       {allTags.length > 0 && (
-        <div className="w-full max-w-xl flex flex-wrap gap-2 justify-center mt-2">
+        <div className="w-full max-w-5xl flex flex-wrap gap-2 justify-center mt-2">
           {allTags.map((tag) => {
             const isActive = selectedTags.includes(tag);
             return (

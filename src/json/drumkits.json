@@ -1,18 +1,10 @@
 [
     {
        "id": "kit1",
-       "title": "drum kit",
-       "cover": "/images/LANE.jpg",
-       "audio": "/audio/Crash-Butter.wav",
-       "price":40.00
-    },
-    {
-       "id": "kit2",
-       "title": "drum kit",
+       "title": "+",
        "cover": "/images/LANE.jpg",
        "audio": "/audio/Crash-Butter.wav",
        "price":40.00
     }
-
 
  ]
